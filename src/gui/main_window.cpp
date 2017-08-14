@@ -14,6 +14,8 @@
 #include <QHeaderView>
 #include <QLabel>
 #include <QSortFilterProxyModel>
+#include <QIcon>
+#include <QBitmap>
 
 main_window::main_window (employee_list *list, QWidget *parent)
   : QDialog(parent)
@@ -65,7 +67,18 @@ void main_window::set_layout ()
 {
   QVBoxLayout *vlo_0 = new QVBoxLayout;
   {
-    vlo_0->addWidget (m_search_le->as_qlineedit ());
+    QHBoxLayout *hlo_1 = new QHBoxLayout;
+    {
+      QLabel *label = new QLabel (this);
+      QPixmap pixmap;
+      pixmap.load (":/icons/search.png");
+      pixmap = pixmap.scaled (24, 24);
+      label->setPixmap (pixmap);
+      label->setMask(pixmap.mask());
+      hlo_1->addWidget (label);
+      hlo_1->addWidget (m_search_le->as_qlineedit ());
+    }
+    vlo_0->addLayout (hlo_1);
     vlo_0->addWidget (m_table);
     QHBoxLayout *hlo_0 = new QHBoxLayout;
     {

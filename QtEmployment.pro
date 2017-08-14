@@ -55,3 +55,6 @@ HEADERS  += src/gui/main_window.h \
 INCLUDEPATH += src
 
 #QMAKE_CXXFLAGS += -std=c++14
+
+RESOURCES += \
+    resources.qrc

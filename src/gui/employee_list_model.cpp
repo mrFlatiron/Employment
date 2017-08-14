@@ -57,7 +57,7 @@ QVariant employee_list_model::data (const QModelIndex &index, int role) const
   if (role == Qt::FontRole)
     {
       QFont font;
-      font.setPointSizeF (13);
+      font.setPointSizeF (11);
       return font;
     }
 
