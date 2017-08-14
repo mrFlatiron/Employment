@@ -4,6 +4,8 @@
 #include <QDialog>
 #include <memory>
 
+#include "line_edit_w_hint.h"
+
 class QLineEdit;
 class QPushButton;
 class QTableView;
@@ -11,10 +13,9 @@ class QLabel;
 class QSortFilterProxyModel;
 
 class add_emp_window;
-
 class employee_list_model;
-
 class employee_list;
+class search_proxy_model;
 
 class main_window : public QDialog
 {
@@ -24,11 +25,13 @@ class main_window : public QDialog
 
   QTableView *m_table;
 
-  QLineEdit *m_search_le;
+  line_edit_w_hint *m_search_le;
   QPushButton *m_remove_pb;
   QPushButton *m_add_pb;
   QLabel *m_status_label;
-  QSortFilterProxyModel *m_proxy_model;
+  QSortFilterProxyModel *m_std_proxy_model;
+
+  search_proxy_model *m_search_proxy_model;
 
   add_emp_window *m_add_emp_window;
 
@@ -51,6 +54,7 @@ private slots:
   void set_status_to_idle ();
   void remove_selected_employies ();
   void on_edit_error ();
+  void on_search_changed (line_edit_w_hint::hint, const QString &hint_str);
 };
 
 #endif // MAIN_WINDOW_H

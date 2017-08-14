@@ -4,6 +4,8 @@
 #include "kernel/employee/employee_list.h"
 #include "add_emp_window.h"
 
+#include "search_proxy_model.h"
+
 #include <QPushButton>
 #include <QLineEdit>
 #include <QTableView>
@@ -38,7 +40,7 @@ QSize main_window::sizeHint () const
 
 void main_window::create_widgets ()
 {
-  m_search_le = new QLineEdit (this);
+  m_search_le = new line_edit_w_hint (this);
   m_add_pb = new QPushButton ("Add");
   m_remove_pb = new QPushButton ("Remove", this);
   m_status_label = new QLabel ("Idle", this);
@@ -48,9 +50,10 @@ void main_window::create_widgets ()
 
   m_add_emp_window->hide ();
 
-  m_proxy_model = new QSortFilterProxyModel (this);
-  m_proxy_model->setSourceModel (m_table_model.get ());
-  m_table->setModel (m_proxy_model);
+//  m_std_proxy_model = new QSortFilterProxyModel (this);
+//  m_std_proxy_model->setSourceModel (m_table_model.get ());
+  m_search_proxy_model = new search_proxy_model (m_table_model.get ());
+  m_table->setModel (m_search_proxy_model);
   m_table->setSelectionBehavior (QAbstractItemView::SelectRows);
   m_table->setSelectionMode (QAbstractItemView::ExtendedSelection);
   m_table->setAlternatingRowColors (true);
@@ -62,7 +65,7 @@ void main_window::set_layout ()
 {
   QVBoxLayout *vlo_0 = new QVBoxLayout;
   {
-    vlo_0->addWidget (m_search_le);
+    vlo_0->addWidget (m_search_le->as_qlineedit ());
     vlo_0->addWidget (m_table);
     QHBoxLayout *hlo_0 = new QHBoxLayout;
     {
@@ -84,6 +87,8 @@ void main_window::make_connections ()
   connect (m_table->selectionModel (), SIGNAL (selectionChanged (const QItemSelection, const QItemSelection)), this, SLOT (set_status_to_selection ()));
   connect (m_remove_pb, SIGNAL (clicked ()), this, SLOT (remove_selected_employies ()));
   connect (m_table_model.get (), SIGNAL (error_occured ()), this, SLOT (on_edit_error ()));
+  connect (m_search_le, SIGNAL (text_changed (line_edit_w_hint::hint, const QString &)), this,
+           SLOT (on_search_changed (line_edit_w_hint::hint, const QString &)));
 }
 
 void main_window::set_status_text (const QString &txt)
@@ -138,7 +143,7 @@ void main_window::remove_selected_employies ()
   m_table_model->emp_list ()->begin_transaction ();
   for (QModelIndex index : rows)
     {
-      int row = m_proxy_model->mapToSource (index).row ();
+      int row = /*m_std_proxy_model->mapToSource (*/m_search_proxy_model->mapToSource (index)/*)*/.row ();
       bool check = m_table_model->remove_by_row (row);
       if (!check)
         failed++;
@@ -151,6 +156,26 @@ void main_window::remove_selected_employies ()
 void main_window::on_edit_error ()
 {
   set_status_text (m_table_model->last_error ());
+}
+
+void main_window::on_search_changed (line_edit_w_hint::hint hint, const QString &hint_str)
+{
+  switch (hint)
+    {
+    case line_edit_w_hint::hint::append:
+      m_search_proxy_model->append_to_search_str (hint_str);
+      break;
+    case line_edit_w_hint::hint::clear:
+      m_search_proxy_model->clear_search_str ();
+      break;
+    case line_edit_w_hint::hint::other:
+      m_search_proxy_model->set_search_str (hint_str);
+      break;
+    case line_edit_w_hint::hint::COUNT:
+      DEBUG_PAUSE ("Shouldn't happen");
+      return;
+    }
+  m_search_proxy_model->sort (0);
 }
 
 void main_window::open_add_window ()

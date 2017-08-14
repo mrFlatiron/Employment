@@ -24,7 +24,10 @@ SOURCES += src/main.cpp\
     src/kernel/employee/employee_list.cpp \
     src/gui/employee_list_model.cpp \
     src/gui/add_emp_window.cpp \
-    src/kernel/employee/employee_utils.cpp
+    src/kernel/employee/employee_utils.cpp \
+    src/gui/table_dynamic_search.cpp \
+    src/gui/search_proxy_model.cpp \
+    src/gui/line_edit_w_hint.cpp
 
 HEADERS  += src/gui/main_window.h \
     src/kernel/employee/employee_base.h \
@@ -44,7 +47,10 @@ HEADERS  += src/gui/main_window.h \
     src/common/utils.h \
     src/gui/add_emp_window.h \
     src/kernel/employee/employee_utils.h \
-    src/containers/enum_bitset.h
+    src/containers/enum_bitset.h \
+    src/gui/table_dynamic_search.h \
+    src/gui/search_proxy_model.h \
+    src/gui/line_edit_w_hint.h
 
 INCLUDEPATH += src
 
