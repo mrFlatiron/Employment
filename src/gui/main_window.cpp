@@ -91,6 +91,11 @@ void main_window::set_layout ()
 
   }
   setLayout (vlo_0);
+
+  setWindowFlags(Qt::Window |
+                 Qt::CustomizeWindowHint |
+                 Qt::WindowMaximizeButtonHint |
+                 Qt::WindowCloseButtonHint);
 }
 
 void main_window::make_connections ()
