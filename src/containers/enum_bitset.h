@@ -6,10 +6,10 @@
 
 
 template<typename Enum, typename = use_if_enum<Enum>>
-class enum_bitset : private std::bitset<enum_size (Enum ())>
+class enum_bitset : private std::bitset<static_cast<size_t> (Enum::COUNT)>
 {
   using self = enum_bitset<Enum>;
-  using base = std::bitset<enum_size (Enum ())>;
+  using base = std::bitset<static_cast<size_t> (Enum::COUNT)>;
   public:
   enum_bitset () {}
   ~enum_bitset () {}

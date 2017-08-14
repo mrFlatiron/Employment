@@ -26,7 +26,7 @@ namespace employee
     has_bonus,
     bonus_percent,
     realized_outcome,
-    TOTAL
+    COUNT
   };
 
   bool is_field_valid (field f, const QString &str);
@@ -34,8 +34,6 @@ namespace employee
   QString error_string (field f);
 
   field enum_convert (add_emp_field aef);
-
-  constexpr employee::field enum_end (employee::field) {return employee::field::TOTAL;}
 }
 
 

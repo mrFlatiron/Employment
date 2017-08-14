@@ -3,6 +3,7 @@
 #include "common/utils.h"
 #include "kernel/employee/employee_utils.h"
 #include "common/enum_misc.h"
+#include <QFont>
 
 employee_list_model::employee_list_model (employee_list *list, QObject *parent)
   : QAbstractTableModel (parent),
@@ -52,6 +53,13 @@ QVariant employee_list_model::data (const QModelIndex &index, int role) const
   employee::field field = enum_cast<employee::field> (col);
 
   compensation type = emp->compensation_type ();
+
+  if (role == Qt::FontRole)
+    {
+      QFont font;
+      font.setPointSizeF (13);
+      return font;
+    }
 
   switch (field)
     {
@@ -118,7 +126,7 @@ QVariant employee_list_model::data (const QModelIndex &index, int role) const
           return static_cast<employee_salesman *> (emp)->realized_outcome ();
         }
       break;
-    case employee::field::TOTAL:
+    case employee::field::COUNT:
       DEBUG_PAUSE ("Shouldn't happen");
       return QVariant ();
     }
@@ -163,7 +171,7 @@ QVariant employee_list_model::headerData (int section, Qt::Orientation orientati
       return "Bonus percent";
     case employee::field::realized_outcome:
       return "Realized outcome";
-    case employee::field::TOTAL:
+    case employee::field::COUNT:
       DEBUG_PAUSE ("Shouldn't happen");
       return QVariant ();
     }
@@ -298,7 +306,7 @@ bool employee_list_model::setData (const QModelIndex &index, const QVariant &val
       static_cast<employee_salesman *> (emp_base)->set_realized_outcome (value.toInt ());
       dataChanged (index, index);
       return true;
-    case employee::field::TOTAL:
+    case employee::field::COUNT:
       DEBUG_PAUSE ("Shouldn't happen");
       return false;
     }
@@ -339,7 +347,7 @@ Qt::ItemFlags employee_list_model::flags (const QModelIndex &index) const
       if (type == compensation::salesman)
         flags |= Qt::ItemIsEditable;
       break;
-    case employee::field::TOTAL:
+    case employee::field::COUNT:
       DEBUG_PAUSE ("Shouldn't happen");
       return Qt::NoItemFlags;
     }

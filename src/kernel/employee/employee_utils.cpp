@@ -36,7 +36,7 @@ bool employee::is_field_valid (employee::field f, const QString &str)
         return QRegExp ("^\\s*(Yes|No|true|false)\\s*$",
                         Qt::CaseInsensitive).indexIn (str) == 0;
       }
-    case employee::field::TOTAL:
+    case employee::field::COUNT:
       DEBUG_PAUSE ("Shouldn't happen");
       return false;
     }
@@ -65,7 +65,7 @@ QString employee::error_string (employee::field f)
       return "Bonus percent must be a real number";
     case field::realized_outcome:
       return "Realized outcome must be integer";
-    case field::TOTAL:
+    case field::COUNT:
       DEBUG_PAUSE ("Shouldn't happen");
       return "";
     }
@@ -87,7 +87,7 @@ employee::field employee::enum_convert (add_emp_field aef)
     case add_emp_field::bonus_percent:
       return field::bonus_percent;
     case add_emp_field::COUNT:
-      return field::TOTAL;
+      return field::COUNT;
     }
-  return field::TOTAL;
+  return field::COUNT;
 }
