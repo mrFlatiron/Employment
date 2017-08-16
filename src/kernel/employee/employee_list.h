@@ -38,9 +38,9 @@ public:
   employee_base       *get (const job_id i);
   const employee_base *get (const job_id i) const;
 
-  job_id add_employee (employee_hourly &&emp);
-  job_id add_employee (employee_monthly &&emp);
-  job_id add_employee (employee_salesman &&emp);
+  job_id add_employee (employee_hourly &&emp, const bool preserve_id = false);
+  job_id add_employee (employee_monthly &&emp, const bool preserve_id = false);
+  job_id add_employee (employee_salesman &&emp, const bool preserve_id = false);
 
   bool remove_by_id (const job_id id);
 
@@ -69,7 +69,7 @@ public slots:
   void on_sublist_size_changed ();
 private:
   template<typename T>
-  job_id add_employee (T&& emp, employee_list_generic<T> &con);
+  job_id add_employee (T&& emp, employee_list_generic<T> &con, const bool preserve_id = false);
 
   void try_size_changed ();
   void try_data_changed (const job_id min, const job_id max, const enum_bitset<employee::field> &or_fields);

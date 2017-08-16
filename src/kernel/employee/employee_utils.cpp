@@ -7,6 +7,9 @@ bool employee::is_field_valid (employee::field f, const QString &str)
 {
   switch (f)
     {
+    case employee::field::id:
+      DEBUG_PAUSE ("Must be auto generated");
+      return false;
     case employee::field::compensation:
       return QRegExp ("^\\s*(Hourly|Salesman|Monthly)\\s*$",
                       Qt::CaseInsensitive).indexIn (str) == 0;
@@ -47,6 +50,8 @@ QString employee::error_string (employee::field f)
 {
   switch (f)
     {
+    case field::id:
+      return "Wrong ID";
     case field::compensation:
       return "Wrong compensation type";
     case field::first_name:
@@ -90,4 +95,61 @@ employee::field employee::enum_convert (add_emp_field aef)
       return field::COUNT;
     }
   return field::COUNT;
+}
+const char *employee::enum_to_string (employee::field f)
+{
+  switch (f)
+    {
+    case employee::field::id:
+      return "ID";
+    case employee::field::compensation:
+      return "compensation";
+    case employee::field::first_name:
+      return "first_name";
+    case employee::field::last_name:
+      return "last_name";
+    case employee::field::ssn:
+      return "ssn";
+    case employee::field::salary:
+      return "salary_wage";
+    case employee::field::hours_done:
+      return "hours_done";
+    case employee::field::has_bonus:
+      return "has_bonus";
+    case employee::field::bonus_percent:
+      return "bonus_percent";
+    case employee::field::realized_outcome:
+      return "realized_outcome";
+    case employee::field::COUNT:
+      return "";
+    }
+}
+
+const char *employee::enum_to_sqlite_type (employee::field f)
+{
+  switch (f)
+    {
+    case employee::field::id:
+      return "INTEGER";
+    case employee::field::compensation:
+      return "INTEGER";
+    case employee::field::first_name:
+      return "TEXT";
+    case employee::field::last_name:
+      return "TEXT";
+    case employee::field::ssn:
+      return "TEXT";
+    case employee::field::salary:
+      return "INTEGER";
+    case employee::field::hours_done:
+      return "REAL";
+    case employee::field::has_bonus:
+      return "INTEGER";
+    case employee::field::bonus_percent:
+      return "REAL";
+    case employee::field::realized_outcome:
+      return "INTEGER";
+    case employee::field::COUNT:
+      return "";
+    }
 }

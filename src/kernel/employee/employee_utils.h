@@ -17,6 +17,7 @@ namespace employee
 {
   enum class field
   {
+    id,
     compensation,
     first_name,
     last_name,
@@ -34,6 +35,9 @@ namespace employee
   QString error_string (field f);
 
   field enum_convert (add_emp_field aef);
+
+  const char *enum_to_string (field);
+  const char *enum_to_sqlite_type (field);
 }
 
 

@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
+QT += sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -27,7 +28,10 @@ SOURCES += src/main.cpp\
     src/kernel/employee/employee_utils.cpp \
     src/gui/table_dynamic_search.cpp \
     src/gui/search_proxy_model.cpp \
-    src/gui/line_edit_w_hint.cpp
+    src/gui/line_edit_w_hint.cpp \
+    src/modules/sqlite_table_configurer.cpp \
+    src/modules/sqlite_employee_db.cpp \
+    src/kernel/employee/employee_any.cpp
 
 HEADERS  += src/gui/main_window.h \
     src/kernel/employee/employee_base.h \
@@ -50,7 +54,10 @@ HEADERS  += src/gui/main_window.h \
     src/containers/enum_bitset.h \
     src/gui/table_dynamic_search.h \
     src/gui/search_proxy_model.h \
-    src/gui/line_edit_w_hint.h
+    src/gui/line_edit_w_hint.h \
+    src/modules/sqlite_table_configurer.h \
+    src/modules/sqlite_employee_db.h \
+    src/kernel/employee/employee_any.h
 
 INCLUDEPATH += src
 

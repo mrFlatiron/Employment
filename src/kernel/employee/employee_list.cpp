@@ -45,19 +45,19 @@ const employee_base *employee_list::get (const job_id i) const
   return nullptr;
 }
 
-job_id employee_list::add_employee (employee_hourly &&emp)
+job_id employee_list::add_employee (employee_hourly &&emp, const bool preserve_id)
 {
-  return add_employee (std::move (emp), m_hourly_emp);
+  return add_employee (std::move (emp), m_hourly_emp, preserve_id);
 }
 
-job_id employee_list::add_employee (employee_monthly &&emp)
+job_id employee_list::add_employee (employee_monthly &&emp, const bool preserve_id)
 {
-  return add_employee (std::move (emp), m_monthly_emp);
+  return add_employee (std::move (emp), m_monthly_emp, preserve_id);
 }
 
-job_id employee_list::add_employee (employee_salesman &&emp)
+job_id employee_list::add_employee (employee_salesman &&emp, const bool preserve_id)
 {
-  return add_employee (std::move (emp), m_salesman_emp);
+  return add_employee (std::move (emp), m_salesman_emp, preserve_id);
 }
 
 bool employee_list::remove_by_id (const job_id id)
@@ -225,7 +225,7 @@ void employee_list::try_data_changed (const job_id min, const job_id max, const 
 }
 
 template<typename T>
-job_id employee_list::add_employee (T&& emp, employee_list_generic<T> &con)
+job_id employee_list::add_employee (T&& emp, employee_list_generic<T> &con, const bool preserve_id)
 {
   if (!is_ssn_unique (emp.ssn ()))
     {
@@ -233,12 +233,24 @@ job_id employee_list::add_employee (T&& emp, employee_list_generic<T> &con)
       return -1;
     }
 
-  m_greatest_id++;
+  job_id id;
 
-  m_ssn_to_id.insert (std::make_pair (emp.ssn (), m_greatest_id));
-  m_id_to_ssn.insert (std::make_pair (m_greatest_id, emp.ssn ()));
+  if (emp.id () < 0 || !preserve_id)
+    {
+      m_greatest_id++;
+      id = m_greatest_id;
+    }
+  else
+    {
+      if (m_greatest_id < emp.id ())
+        m_greatest_id = emp.id ();
+      id = emp.id ();
+    }
 
-  con.add_employee (std::move (emp), m_greatest_id);
+  m_ssn_to_id.insert (std::make_pair (emp.ssn (), id));
+  m_id_to_ssn.insert (std::make_pair (id, emp.ssn ()));
 
-  return m_greatest_id;
+  con.add_employee (std::move (emp), id);
+
+  return id;
 }

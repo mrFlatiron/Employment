@@ -6,50 +6,24 @@
 #include "common/enum_misc.h"
 
 #include "kernel/employee/employee_list.h"
-
+#include "modules/sqlite_employee_db.h"
 
 
 int main (int argc, char *argv[])
 {
+  sqlite_employee_db db;
+  db.set_connection_name ("load");
+  db.set_db_name ("employies");
+
   employee_list global_employee_list;
-
-  employee_salesman emp_s;
-  emp_s.set_first_name ("ab");
-  emp_s.set_last_name ("tt");
-  emp_s.set_ssn (ssn_handle  ("123456789"));
-  emp_s.set_salary (250000);
-  emp_s.set_bonus_coef (0.15);
-  emp_s.set_bonus_state (true);
-  emp_s.set_realized_outcome (100000);
-
-  employee_hourly emp_h;
-  emp_h.set_first_name ("cd");
-  emp_h.set_last_name ("qq");
-  emp_h.set_ssn (ssn_handle ("987654321"));
-  emp_h.set_wage (203240);
-  emp_h.set_hours_done (10);
-
-  employee_hourly emp_h1;
-  emp_h1.set_first_name ("ef");
-  emp_h1.set_last_name ("tt");
-  emp_h1.set_ssn (ssn_handle ("111111111"));
-  emp_h1.set_wage (203240);
-  emp_h1.set_hours_done (10);
-
-  employee_hourly emp_h2;
-  emp_h2.set_first_name ("gh");
-  emp_h2.set_last_name ("qq");
-  emp_h2.set_ssn (ssn_handle ("222222222"));
-  emp_h2.set_wage (203240);
-  emp_h2.set_hours_done (10);
-
-  global_employee_list.add_employee (std::move (emp_s));
-  global_employee_list.add_employee (std::move (emp_h));
-  global_employee_list.add_employee (std::move (emp_h1));
-  global_employee_list.add_employee (std::move (emp_h2));
+  db.get_list_from_db (global_employee_list);
 
   QApplication a(argc, argv);
   main_window w (&global_employee_list);
   w.exec ();
+
+  db.set_connection_name ("save");
+  db.set_db_name ("employies");
+  db.save_list (global_employee_list);
   return 0;
 }

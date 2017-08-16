@@ -63,6 +63,9 @@ QVariant employee_list_model::data (const QModelIndex &index, int role) const
 
   switch (field)
     {
+    case employee::field::id:
+      if (role == Qt::DisplayRole)
+        return emp->id ();
     case employee::field::compensation:
       if (role == Qt::DisplayRole)
         return enum_to_string (emp->compensation_type ());
@@ -153,6 +156,8 @@ QVariant employee_list_model::headerData (int section, Qt::Orientation orientati
 
   switch (field)
     {
+    case employee::field::id:
+      return "ID";
     case employee::field::compensation:
       return "Compensation";
     case employee::field::first_name:
@@ -191,6 +196,7 @@ bool employee_list_model::setData (const QModelIndex &index, const QVariant &val
 
   switch (field)
     {
+    case employee::field::id:
     case employee::field::compensation:
       DEBUG_PAUSE ("Shouldn't happen");
       return false;
@@ -315,6 +321,9 @@ bool employee_list_model::setData (const QModelIndex &index, const QVariant &val
 
 Qt::ItemFlags employee_list_model::flags (const QModelIndex &index) const
 {
+  if (!index.isValid ())
+    return Qt::NoItemFlags;
+
   Qt::ItemFlags flags = Qt::ItemIsSelectable | Qt::ItemIsEnabled;
   employee_base *emp = m_emp_list->get (m_row_to_index[index.row ()]);
   if (!emp)
@@ -329,6 +338,7 @@ Qt::ItemFlags employee_list_model::flags (const QModelIndex &index) const
 
   switch (field)
     {
+    case employee::field::id:
     case employee::field::compensation:
       break;
     case employee::field::first_name:
