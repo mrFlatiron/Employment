@@ -25,7 +25,6 @@ void sqlite_employee_db::get_list_from_db (employee_list &list)
   QSqlQuery selected (db);
   if (!selected.prepare (base::simple_query (sqlite_simple_query::select)))
     {
-      DEBUG_PAUSE ("Why is that?");
       return;
     }
 
