@@ -12,7 +12,6 @@
 int main (int argc, char *argv[])
 {
   sqlite_employee_db db;
-  db.set_connection_name ("load");
   db.set_db_name ("employies");
 
   employee_list global_employee_list;
@@ -22,8 +21,6 @@ int main (int argc, char *argv[])
   main_window w (&global_employee_list);
   w.exec ();
 
-  db.set_connection_name ("save");
-  db.set_db_name ("employies");
   db.save_list (global_employee_list);
   return 0;
 }

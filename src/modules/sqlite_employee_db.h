@@ -15,9 +15,7 @@ public:
   sqlite_employee_db ();
   ~sqlite_employee_db ();
 
-  using base::set_connection_name;
   using base::set_db_name;
-  using base::simple_query;
 
   void get_list_from_db (employee_list &emp_list);
   void save_list (const employee_list &list);

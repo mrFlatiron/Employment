@@ -14,6 +14,7 @@ sqlite_employee_db::~sqlite_employee_db ()
 
 void sqlite_employee_db::get_list_from_db (employee_list &list)
 {
+  base::set_connection_name ("load");
 
   if (!base::connect ())
     {
@@ -103,6 +104,8 @@ void sqlite_employee_db::get_list_from_db (employee_list &list)
 
 void sqlite_employee_db::save_list (const employee_list &list)
 {
+  base::set_connection_name ("save");
+
   if (!base::db_handle ().open ())
     {
       if (!base::connect ())
@@ -119,19 +122,19 @@ void sqlite_employee_db::save_list (const employee_list &list)
   QSqlQuery create (db);
 
 
-  if (!pragma.prepare (simple_query (sqlite_simple_query::sync_pragma_off))
+  if (!pragma.prepare (base::simple_query (sqlite_simple_query::sync_pragma_off))
       || !pragma.exec ())
     {
       DEBUG_PAUSE ("Why is that?");
 //      return;
     }
-  if (!drop.prepare (simple_query (sqlite_simple_query::drop))
+  if (!drop.prepare (base::simple_query (sqlite_simple_query::drop))
       || !drop.exec ())
     {
       DEBUG_PAUSE ("Why is that?");
 //      return;
     }
-  if (!create.prepare (simple_query (sqlite_simple_query::create))
+  if (!create.prepare (base::simple_query (sqlite_simple_query::create))
       || !create.exec ())
     {
       DEBUG_PAUSE ("Why is that?");
@@ -139,7 +142,7 @@ void sqlite_employee_db::save_list (const employee_list &list)
     }
 
   QSqlQuery insert_stmt (db);
-  insert_stmt.prepare (simple_query (sqlite_simple_query::insert));
+  insert_stmt.prepare (base::simple_query (sqlite_simple_query::insert));
 
   std::vector<job_id> all_ids = list.all_ids ();
 

@@ -10,9 +10,6 @@
 
 #include <cstdio>
 
-//enum_to_sqlite_type
-//enum_to_sqlite_contraint
-
 enum class sqlite_simple_query
 {
   drop,
@@ -62,6 +59,8 @@ public:
   {
     m_connection_name = connection_name;
     m_db = QSqlDatabase::addDatabase ("QSQLITE", m_connection_name);
+    if (!QRegularExpression ("^\\s*$").match (m_db_name).hasMatch ())
+      set_db_name (m_db_name);
   }
 
   bool connect ()
